@@ -3,6 +3,7 @@ import bodyParser from "body-parser"
 import jwt from "jsonwebtoken"
 import axios from "axios"
 
+
 const app = express()
 
 //middlewares
@@ -37,9 +38,17 @@ app.post('/dados', (req, res) => {
 })
 
 app.get('/discord', (req, res) => {
-    const URL_BASE = "https://discord.com/api/v10"
-    console.log(req.query)
-    axios.get(URL_BASE + "/user/@me")
+    const URL_BASE = "https://discord.com/api"
+    console.log(req.query.code)
+
+    const params = new URLSearchParams()
+    params.append("client_id", "1085514062525374495")
+    params.append("client_secret", "")
+    params.append("grant_type", "authorization_code")
+    params.append("code", req.query.code)
+    params.append("redirect_uri", )
+    axios.post(URL_BASE + "/oauth2/token")
+
     res.send()
 })
 
