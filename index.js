@@ -2,10 +2,18 @@ import express from "express"
 import bodyParser from "body-parser"
 import jwt from "jsonwebtoken"
 import axios from "axios"
+import mysql from "mysql"
 
 
 const app = express()
+const conncetion = mysql.createConnection({
+    host:"localhost",
+    user:"root",
+    password:"",
+    database:"javascript"
+})
 
+conncetion.connect()
 //middlewares
 app.use(bodyParser.json())
 
@@ -50,6 +58,24 @@ app.get('/discord', (req, res) => {
     axios.post(URL_BASE + "/oauth2/token")
 
     res.send()
+})
+
+
+app.post('/banco', (req, res)=>{
+    if (!req.body.name || !req.body.idade){
+        return res.jason({erro:"Um ou mais campos estão faltando"})
+    }
+
+    const nome = req.body.name
+    const idade = req.body.idade
+
+    conncetion.query(`Insert into usuarios(nome, idade) values (${nome}, ${idade})`,(error, results, fields)=> {
+        if (error){
+            console.log(error)
+        }
+        console.log(results)
+        console.log(fields)
+    })
 })
 
 
